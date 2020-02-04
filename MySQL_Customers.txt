@@ -1,0 +1,24 @@
+#adding indexes to table with millions of records for faster search
+ALTER TABLE nonsensitive ADD INDEX (IsActive, DateOfBirth);
+
+SELECT address.CustomerID, address.CustHouseNo, address.CustStreetNm, address.CustAddressline1, address.CustAddressline2, address.CustAddressline3
+FROM address
+WHERE address.CustomerID IN (
+    SELECT nonsensitive.CustomerID
+    from nonsensitive
+    WHERE nonsensitive.IsActive = 1
+);
+
+SELECT interest.CustomerID, interest.CustomerInterest1, interest.CustomerInterest2
+FROM interest
+WHERE interest.CustomerID IN (
+    SELECT nonsensitive.CustomerID
+    from nonsensitive
+    WHERE nonsensitive.DateOfBirth LIKE '1986%'
+    UNION SELECT sensitiv.CustomerID
+    from sensitiv
+    WHERE sensitiv.DateOfBirth LIKE '1986%'
+    UNION SELECT foreign_customers.CustomerID
+    from foreign_customers
+    WHERE foreign_customers.DateOfBirth LIKE '1986%'
+);
