@@ -1,0 +1,7 @@
+cat script.sh
+#!/bin/bash
+systemctl status sshd | grep Active: >> /root/test.txt
+chmod +x script.sh 
+./script.sh
+cat /root/test.txt
+Active: active (running) since Tue 2020-02-04 11:04:18 CET; 54min ago
